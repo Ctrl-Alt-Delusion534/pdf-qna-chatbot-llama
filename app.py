@@ -10,7 +10,7 @@ from langchain.chains import create_retrieval_chain
 import os
 import time
 
-# --- CONFIG ---
+#UI
 st.set_page_config(page_title="PDF Q&A Chatbot", page_icon="💬", layout="wide")
 st.title("💬 Your Friendly PDF Q&A Assistant")
 
@@ -23,7 +23,7 @@ except KeyError:
     st.error(" Oops! I couldn’t find a `GROQ_API_KEY` in your secrets. Please add it before continuing.")
     st.stop()
 
-# --- Prompt setup ---
+# Prompt Template
 prompt_template = """
 Answer the question strictly from the context.
 If you don’t find the answer, say "I don't have information about that in this document."
@@ -36,7 +36,7 @@ Question: {input}
 """
 prompt = ChatPromptTemplate.from_template(prompt_template)
 
-# --- Embeddings (cached safely) ---
+#Using HuggingFaceEmbeddings
 @st.cache_resource
 def load_embeddings():
     return HuggingFaceEmbeddings(model_name="hkunlp/instructor-large")
@@ -49,7 +49,7 @@ if "retrieval_chain" not in st.session_state:
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# --- Sidebar upload ---
+
 with st.sidebar:
     st.header("📂 Upload your PDF")
     uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
